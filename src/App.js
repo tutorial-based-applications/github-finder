@@ -1,10 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import axios from 'axios'
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+
 import './App.css'; // entire app css
+
 import Navbar from './components/layout/Navbar.js';
 import Users from './components/users/Users.js';
-import Search from './components/users/Search.js'
-import Alert from './components/layout/Alert.js'
-import axios from 'axios'
+import Search from './components/users/Search.js';
+import Alert from './components/layout/Alert.js';
+import About from './components/Pages/About.js';
+
 // this new with create-react-app, it creates functional components, not class components.
 // the return of this function is the <App /> rendered in the index.html, in the <div /> with id of "root"
 
@@ -38,20 +43,37 @@ class App extends Component {
   render(){
     const { loading, users, alert } = this.state;
     return (
-      <div className="App">
+      <Router>
+     <div className="App">
         <Navbar/>
         <div className='container'>
           <Alert alert={alert} />
-          <Search 
+
+          <Switch>
+            <Route 
+            exact 
+            path='/'
+            render={props => (
+              <Fragment>
+                 <Search 
           searchUsers={this.searchUsers} 
           clearUsers={this.clearUsers}  
           showClear={(users.length > 0) ? true : false } 
           setAlert={this.setAlert}
           />
 
-        <Users loading={loading} users={users} />
+             <Users loading={loading} users={users} />
+            </Fragment>
+            )}/>
+
+            <Route exact path='/about' component={About} />
+
+          </Switch>
+         
         </div>
       </div>
+      </Router>
+ 
     );
   }
 }
